@@ -11,6 +11,10 @@ public class MultiClientTest {
      * @param args Command-line arguments. Not used.
      */
     public static void main(String args[]) {
+        // MY OWN TEST 
+        SimpleTcpServer server = new SimpleTcpServer();
+        server.run();
+        
         log("Starting several clients to test servers multi-threading capability");
         startNewClient();
         startNewClient();

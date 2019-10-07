@@ -1,9 +1,6 @@
 package no.ntnu.datakomm;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -30,26 +27,19 @@ public class SimpleTcpServer {
             ServerSocket welcomeSocket = new ServerSocket(PORT);
             System.out.println("Connected to server on port " + PORT);
             
-            Socket clientSocket = welcomeSocket.accept();
+            boolean mustRun = true;
             
-            InputStreamReader reader = new InputStreamReader(clientSocket.getInputStream());
-            BufferedReader bufReader = new BufferedReader(reader);
-            
-            String clientInput = bufReader.readLine();
-            System.out.println("Client: " + clientInput);
-            
-            String response = "Hei!";
-            
-            PrintWriter writer = new PrintWriter(clientSocket.getOutputStream(), true);
-            writer.println(response);
-            
-            
-            // close client socket
-            clientSocket.close();
+            while(mustRun){
+                Socket clientSocket = welcomeSocket.accept();
+
+                ClientHandler clientHandler = new ClientHandler(clientSocket);
+                clientHandler.start();
+            }
 
             
             // closing the welcome socket
             welcomeSocket.close();
+            
         } catch (IOException ex) {
             System.out.println(ex);
         }

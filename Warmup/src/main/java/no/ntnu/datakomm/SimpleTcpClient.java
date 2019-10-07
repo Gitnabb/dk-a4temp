@@ -1,5 +1,17 @@
 package no.ntnu.datakomm;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.net.Socket;
+import java.net.SocketException;
+import java.net.UnknownHostException;
+
+
+
 /**
  * A Simple TCP client, used as a warm-up exercise for assignment A4.
  */
@@ -9,6 +21,7 @@ public class SimpleTcpClient {
     // TCP port
     private static final int PORT = 1301;
 
+    private Socket socket;
     /**
      * Run the TCP Client.
      *
@@ -59,25 +72,25 @@ public class SimpleTcpClient {
                                 if (!sendRequestToServer("2+2")) {
                                     log("Sending another message after closing the connection failed as expected");
                                 } else {
-                                    log("ERROR: sending a message after closing the connection did not fail!");
+                                    log("ERROR 7: sending a message after closing the connection did not fail!");
                                 }
                             } else {
-                                log("ERROR: Failed to stop conversation");
+                                log("ERROR 6: Failed to stop conversation");
                             }
                         } else {
-                            log("ERROR: Failed to receive server's response!");
+                            log("ERROR 5: Failed to receive server's response!");
                         }
                     } else {
-                        log("ERROR: Failed to send invalid message to server!");
+                        log("ERROR 4: Failed to send invalid message to server!");
                     }
                 } else {
-                    log("ERROR: Failed to receive server's response!");
+                    log("ERROR 3: Failed to receive server's response!");
                 }
             } else {
-                log("ERROR: Failed to send valid message to server!");
+                log("ERROR 2: Failed to send valid message to server!");
             }
         } else {
-            log("ERROR: Failed to connect to the server");
+            log("ERROR 1: Failed to connect to the server");
         }
 
         log("Simple TCP client finished");
@@ -89,6 +102,13 @@ public class SimpleTcpClient {
      * @return True on success, false otherwise
      */
     private boolean closeConnection() {
+        try {
+            this.socket.close();
+            return true;
+        } catch (Exception ex) {
+            System.out.println("SOME ERROR in closing socket: " + ex);
+        }
+        
         return false;
     }
 
@@ -100,9 +120,20 @@ public class SimpleTcpClient {
      * @return True when connection established, false otherwise
      */
     private boolean connectToServer(String host, int port) {
-        // TODO - implement this method
-        // Remember to catch all possible exceptions that the Socket class can throw.
-        return false;
+        try {
+            // TODO - implement this method
+            // Remember to catch all possible exceptions that the Socket class can throw.
+            this.socket = new Socket(host, port);
+            return true;
+        } 
+        catch (UnknownHostException uhe){
+            System.out.println(uhe);
+            return false;
+        }
+        catch (IOException ioex) {
+            System.out.println("SOME ERROR in connectToServer: " + ioex);
+            return false;
+        }
     }
 
     /**
@@ -117,8 +148,23 @@ public class SimpleTcpClient {
         // * Connection closed by remote host (server shutdown)
         // * Internet connection lost, timeout in transmission
         // * Connection not opened.
-        // * What is the request is null or empty?
-        return false;
+        // * What if the request is null or empty?
+     
+        try {
+            OutputStream out = this.socket.getOutputStream();
+            PrintWriter writer = new PrintWriter(out, true);
+            writer.println(request);
+            return true;
+            
+        } 
+        catch (SocketException sex){
+            System.out.println("My Socket Exception " + sex);
+            return false;
+        }
+        catch (IOException ioex) {
+            System.out.println("SOME ERROR in sendRequestToServer" + ioex);
+            return false;
+        } 
     }
 
     /**
@@ -130,6 +176,31 @@ public class SimpleTcpClient {
     private String readResponseFromServer() {
         // TODO - implement this method
         // Similarly to other methods, exception can happen while trying to read the input stream of the TCP Socket
+        
+        try{
+            InputStream in = this.socket.getInputStream();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+            String oneResponseLine;
+            
+            do {                
+                oneResponseLine = reader.readLine();
+                if(oneResponseLine != null)
+                {
+                    return oneResponseLine;
+                }
+            } while (oneResponseLine != null);
+            
+
+        }
+        catch(Exception e){
+            System.out.println("Eitthvað að í readResponseFromServer " + e);
+        }
+        
+        
+        
+        
+            
+            
         return null;
     }
 
