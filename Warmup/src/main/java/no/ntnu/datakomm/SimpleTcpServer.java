@@ -30,20 +30,12 @@ public class SimpleTcpServer {
             boolean mustRun = true;
 
             while (mustRun) {
+                // Accept new connection from a Client.
                 Socket clientSocket = welcomeSocket.accept();
-                InputStreamReader reader = new InputStreamReader(clientSocket.getInputStream());
-                BufferedReader buffReader = new BufferedReader(reader);
+                // Makes a new connection that runs on a new thread.
+                ClientHandler clientHandler = new ClientHandler(clientSocket);
+                clientHandler.start();
 
-                String clientInput = buffReader.readLine();
-                System.out.println("Client sent: " + clientInput);
-
-                String response = "Hello Client";
-                PrintWriter writer = new PrintWriter(clientSocket.getOutputStream(), true);
-                writer.println(response);
-                System.out.println("Sent " + response + " to Client");
-
-                // Close connection to this particular client
-                clientSocket.close();
             }
                 // Close the listening socket, allow other services on this port
                 welcomeSocket.close();
