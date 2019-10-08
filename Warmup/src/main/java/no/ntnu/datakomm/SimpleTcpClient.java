@@ -10,10 +10,9 @@ import java.net.*;
  */
 public class SimpleTcpClient {
     // Remote host where the server will be running
-    private static final String HOST = "datakomm.work";
+    private static final String HOST = "localhost";
     // TCP port
-    private static final int PORT = 1301;
-
+    private static final int PORT = 1234;
     private Socket socket;
 
     /**
@@ -47,7 +46,7 @@ public class SimpleTcpClient {
             int b = (int) (1 + Math.random() * 10);
             String request = a + "+" + b;
             if (sendRequestToServer(request)) {
-                log("Sent " + request + " to server");
+                log("Sent " + request + " to Server");
                 String response = readResponseFromServer();
                 if (response != null) {
                     log("Server responded with: " + response);
@@ -150,10 +149,12 @@ public class SimpleTcpClient {
         boolean requestSent = false;
 
         try{
-            // Send HTTP Request to the server
-            String command = "GET / HTTP/1.0\r\n\r\n";
-            OutputStream outputStream = this.socket.getOutputStream();
-            outputStream.write(command.getBytes());
+            // Send request to the server
+            String command = "Hello from Client";
+            OutputStream outputStream = socket.getOutputStream();
+            PrintWriter writer = new PrintWriter(outputStream, true);
+            writer.println(command);
+            writer.println("");
             requestSent = true;
 
         } catch (IOException e){
@@ -172,11 +173,11 @@ public class SimpleTcpClient {
     private String readResponseFromServer() {
         // TODO - implement this method
         // Similarly to other methods, exception can happen while trying to read the input stream of the TCP Socket
-
         // Get HTTP response from the server
         String response = "";
         try{
-            BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            InputStreamReader inputStreamReader = new InputStreamReader(socket.getInputStream());
+            BufferedReader reader = new BufferedReader(inputStreamReader);
             response = reader.readLine();
         } catch (IOException e){
             System.out.println("Response Error: " + e.getMessage());
