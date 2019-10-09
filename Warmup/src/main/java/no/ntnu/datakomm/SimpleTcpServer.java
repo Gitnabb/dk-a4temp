@@ -10,6 +10,7 @@ import java.nio.Buffer;
  */
 public class SimpleTcpServer {
 
+    public static final String VERSION = "v1";
     private static final int PORT = 1234;
     public static void main(String[] args) {
         SimpleTcpServer server = new SimpleTcpServer();

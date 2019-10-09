@@ -8,6 +8,7 @@ import java.net.Socket;
 
 
 
+
 public class ClientHandler extends Thread {
 
     private final Socket clientSocket;
@@ -23,14 +24,17 @@ public class ClientHandler extends Thread {
         try {
             InputStreamReader reader = new InputStreamReader(clientSocket.getInputStream());
             BufferedReader buffReader = new BufferedReader(reader);
+            PrintWriter writer = new PrintWriter(clientSocket.getOutputStream(), true);
+
+
+            // Prints server version to Client as first write in connection.
+            writer.println(SimpleTcpServer.VERSION);
 
             String clientInput = buffReader.readLine();
             System.out.println("Client sent: " + clientInput);
 
             String response = "Hello Client";
-            PrintWriter writer = new PrintWriter(clientSocket.getOutputStream(), true);
             writer.println(response);
-            System.out.println("Sent " + response + " to Client");
 
             // Close connection to this particular client
             clientSocket.close();

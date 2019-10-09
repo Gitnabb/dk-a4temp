@@ -150,12 +150,25 @@ public class SimpleTcpClient {
 
         try{
             // Send request to the server
-            String command = "Hello from Client";
+            String command = "Hi I'm a Client";
             OutputStream outputStream = socket.getOutputStream();
             PrintWriter writer = new PrintWriter(outputStream, true);
-            writer.println(command);
-            writer.println("");
-            requestSent = true;
+
+            InputStream in = socket.getInputStream();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+
+            // Check Servers connection
+            String serverVersion = reader.readLine();
+            if(serverVersion.equals("v1")){
+                // Send commands to Server
+                writer.println(command);
+                writer.println("");
+                requestSent = true;
+            } else {
+                System.out.println("Wrong server version " + serverVersion);
+            }
+
+            socket.close();
 
         } catch (IOException e){
             System.out.println("Request error " + e.getMessage());
