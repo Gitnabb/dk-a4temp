@@ -1,17 +1,19 @@
 package no.ntnu.datakomm.chat;
 
 import java.io.*;
-import java.net.*;
+import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.LinkedList;
 import java.util.List;
+
 
 public class TCPClient {
     private PrintWriter toServer;
     private BufferedReader fromServer;
     private Socket connection;
+    private String lastError = null;
 
     // Hint: if you want to store a message for the last error, store it here
-    private String lastError = null;
 
     private final List<ChatListener> listeners = new LinkedList<>();
 
@@ -23,11 +25,24 @@ public class TCPClient {
      * @return True on success, false otherwise
      */
     public boolean connect(String host, int port) {
-        // TODO Step 1: implement this method
-        // Hint: Remember to process all exceptions and return false on error
-        // Hint: Remember to set up all the necessary input/output stream variables
-        return false;
+        try {
+            this.connection = new socket(host, port);
+            InputStream in = this.connection.getInputStream();
+            Outstream out = this.connection.getOutputStream();
+            this.toServer = new PrintWriter(out, true);
+            this.fromServer = new BufferedReader(new InputStreamReader(in));
+            return true;
+        } catch (UknownHostException e) {
+            this.lastError = "Unknown host";
+            system.out.println(this.lastError);
+            return false;
+        } catch (IOException e) {
+            this.lastError = "I/O Error";
+            System.out.println(this.lastError);
+            return false;
+        }
     }
+
 
     /**
      * Close the socket. This method must be synchronized, because several
