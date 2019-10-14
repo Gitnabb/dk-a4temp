@@ -70,6 +70,7 @@ public class TCPClient {
      */
     public boolean sendPublicMessage(String message) {
         // TODO Step 2: implement this method
+        // TODO: Just to commit on new branch dev-step2-step3
         // Hint: Reuse sendCommand() method
         // Hint: update lastError if you want to store the reason for the error.
         return false;
