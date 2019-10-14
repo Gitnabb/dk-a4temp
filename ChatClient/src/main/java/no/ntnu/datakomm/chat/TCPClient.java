@@ -28,7 +28,19 @@ public class TCPClient {
         // TODO Step 1: implement this method
         // Hint: Remember to process all exceptions and return false on error
         // Hint: Remember to set up all the necessary input/output stream variables
-        return false;
+
+        boolean isConnected = false;
+
+        try {
+            connection = new Socket(host, port);
+            isConnected = true;
+
+        } catch (IOException io) {
+
+            io.getMessage();
+        }
+
+        return isConnected;
     }
 
     /**
@@ -84,8 +96,10 @@ public class TCPClient {
      */
     public boolean sendPublicMessage(String message) {
         // TODO Step 2: implement this method
-        // TODO: Just to commit on new branch dev-step2-step3
         // Hint: Reuse sendCommand() method
+        // Recipient(s) are specified on server-side.
+        this.sendCommand(message);
+
         // Hint: update lastError if you want to store the reason for the error.
         return false;
     }
