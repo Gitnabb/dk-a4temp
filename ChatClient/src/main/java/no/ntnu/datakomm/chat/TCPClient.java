@@ -1,5 +1,7 @@
 package no.ntnu.datakomm.chat;
 
+import jdk.internal.util.xml.impl.Input;
+
 import java.io.*;
 import java.net.*;
 import java.util.LinkedList;
@@ -58,8 +60,20 @@ public class TCPClient {
      */
     private boolean sendCommand(String cmd) {
         // TODO Step 2: Implement this method
-        // Hint: Remember to check if connection is active
-        return false;
+        // Hint: Remember to check if connection is active TODO: CHECK
+
+        boolean commandSent = false;
+
+        if(this.isConnectionActive()){
+
+            System.out.println(">>> " + cmd);
+            this.toServer.println(cmd);
+            commandSent = true;
+        } else {
+            System.out.println("No connection..");
+        }
+
+        return commandSent;
     }
 
     /**
