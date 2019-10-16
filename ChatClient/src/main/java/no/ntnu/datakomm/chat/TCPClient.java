@@ -23,10 +23,22 @@ public class TCPClient {
      * @return True on success, false otherwise
      */
     public boolean connect(String host, int port) {
-        // TODO Step 1: implement this method
-        // Hint: Remember to process all exceptions and return false on error
-        // Hint: Remember to set up all the necessary input/output stream variables
-        return false;
+        try {
+            this.connection = new Socket(host, port);
+            InputStream in = this.connection.getInputStream();
+            OutputStream out = this.connection.getOutputStream();
+            this.toServer = new PrintWriter(out, true);
+            this.fromServer = new BufferedReader(new InputStreamReader(in));
+            return true;
+        } catch (UnknownHostException e) {
+            this.lastError = "Unknown host";
+            System.out.println(this.lastError);
+            return false;
+        } catch (IOException e) {
+            this.lastError = "I/O Error";
+            System.out.println(this.lastError);
+            return false;
+        }
     }
 
     /**
@@ -39,9 +51,26 @@ public class TCPClient {
      * that no two threads call this method in parallel.
      */
     public synchronized void disconnect() {
-        // TODO Step 4: implement this method
-        // Hint: remember to check if connection is active
-    }
+            if (this.connection != null) {
+                System.out.println("Disconnecting...");
+
+                try {
+                    this.toServer.close();
+                    this.fromServer.close();
+                    this.connection.close();
+                } catch (IOException e) {
+                    System.out.println("Error: " + e
+                            .getMessage());
+                    this.lastError = e.getMessage();
+                    this.connection = null;
+                }
+            } else {
+                System.out.println("No connection to close");
+            }
+            System.out.println("Disconnected");
+            this.connection = null;
+        }
+
 
     /**
      * @return true if the connection is active (opened), false if not.
@@ -57,8 +86,12 @@ public class TCPClient {
      * @return true on success, false otherwise
      */
     private boolean sendCommand(String cmd) {
-        // TODO Step 2: Implement this method
-        // Hint: Remember to check if connection is active
+        if (this.connection != null) {
+            System.out.println("> " + cmd);
+            this.toServer.println(cmd);
+            return true;
+        }
+        System.out.println("No connection");
         return false;
     }
 
