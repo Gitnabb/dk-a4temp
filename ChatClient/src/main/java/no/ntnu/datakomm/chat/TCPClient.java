@@ -16,8 +16,6 @@ public class TCPClient {
     private Socket connection;
     private String lastError = null;
 
-    // Hint: if you want to store a message for the last error, store it here
-
     private final List<ChatListener> listeners = new LinkedList<>();
 
     /**
@@ -92,6 +90,10 @@ public class TCPClient {
      * @return true on success, false otherwise
      */
     private boolean sendCommand(String cmd) {
+
+        if (!isValidMessage(cmd)) {
+            return false;
+        }
         if (this.connection != null) {
             System.out.println("> " + cmd);
             this.toServer.println(cmd);
@@ -268,7 +270,6 @@ public class TCPClient {
                     case "loginerr":
                         onLoginResult(false, params);
 
-
                     case "msg":
                     case "privmsg":
                         priv = cmd.equals("privmsg");
@@ -399,4 +400,5 @@ public class TCPClient {
         for (ChatListener l: this.listeners)
             l.onSupportedCommands(commands);
     }
+
 }
