@@ -250,11 +250,14 @@ public class TCPClient {
                 switch (cmd) {
                     case "loginok":
                         onLoginResult(true, null);
+                        break;
 
                     case "loginerr":
                         onLoginResult(false, params);
+                        break;
 
                     case "msg":
+                        break;
                     case "privmsg":
                         priv = cmd.equals("privmsg");
                         spacePos = params.indexOf(' ');
@@ -263,18 +266,22 @@ public class TCPClient {
                             String msg = params.substring(spacePos + 1);
                             onMsgReceived(priv, sender, msg);
                         }
+                        break;
                     case "msgerr":
                         onMsgError(params);
+                        break;
 
                     case "cmderr":
                         onCmdError(params);
+                        break;
 
                     case "users":
                         onUsersList(params.split(" "));
+                        break;
 
                     case "supported":
                         onSupported(params.split(" "));
-
+                        break;
                 }
             }
         }
