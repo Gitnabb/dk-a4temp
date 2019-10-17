@@ -249,7 +249,54 @@ public class TCPClient {
      */
     private void parseIncomingCommands() {
         while (isConnectionActive()) {
-            // TODO Step 3: Implement this method
+            String line = waitServerResponse();
+            if (line != null && line.length() > 0) {
+                boolean priv;
+                String params, cmd;
+                int spacePos = line.indexOf(' ');
+                if (spacePos >= 0) {
+                    cmd = line.substring(0, spacePos);
+                    params = line.substring(spacePos + 1);
+                } else {
+                    cmd = line;
+                    params = " ";
+                }
+                switch (cmd) {
+                    case "loginok":
+                        onLoginResult(true, null);
+
+                    case "loginerr":
+                        onLoginResult(false, params);
+
+
+                    case "msg":
+                    case "privmsg":
+                        priv = cmd.equals("privmsg");
+                        spacePos = params.indexOf(' ');
+                        if (spacePos > 0) {
+                            String sender = params.substring(0, spacePos);
+                            String msg = params.substring(spacePos + 1);
+                            onMsgReceived(priv, sender, msg);
+                        }
+                    case "msgerr":
+                        onMsgError(params);
+
+                    case "cmderr":
+                        onCmdError(params);
+
+                    case "users":
+                        onUsersList(params.split(" "));
+
+                    case "supported":
+                        onHelp(params.split(" "));
+
+                }
+            }
+        }
+    }
+
+
+                // TODO Step 3: Implement this method
             // Hint: Reuse waitServerResponse() method
             // Hint: Have a switch-case (or other way) to check what type of response is received from the server
             // and act on it.
@@ -266,8 +313,8 @@ public class TCPClient {
 
             // TODO Step 8: add support for incoming supported command list (type: supported)
 
-        }
-    }
+
+
 
     /**
      * Register a new listener for events (login result, incoming message, etc)
@@ -353,6 +400,12 @@ public class TCPClient {
      */
     private void onCmdError(String errMsg) {
         // TODO Step 7: Implement this method
+    }
+
+    private void onHelp(String[] commands) {
+        for (ChatListener l : this.listeners) {
+            l.onSupportedCommands(commands);
+        }
     }
 
     /**
