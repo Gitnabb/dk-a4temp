@@ -96,7 +96,6 @@ public class TCPClient {
      */
     public boolean sendPublicMessage(String message) {
         // TODO Step 2: implement this method
-        // Hint: Reuse sendCommand() method
         // Recipient(s) are specified on server-side.
         this.sendCommand(message);
 
@@ -111,7 +110,9 @@ public class TCPClient {
      */
     public void tryLogin(String username) {
         // TODO Step 3: implement this method
-        // Hint: Reuse sendCommand() method
+
+        sendCommand("login" + username);
+
     }
 
     /**
