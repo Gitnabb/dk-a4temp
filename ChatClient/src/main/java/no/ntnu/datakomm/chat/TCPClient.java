@@ -1,5 +1,8 @@
 package no.ntnu.datakomm.chat;
 
+import jdk.internal.util.xml.impl.Input;
+import jdk.nashorn.internal.runtime.ECMAException;
+
 import java.io.*;
 import java.net.Socket;
 import java.net.UnknownHostException;
@@ -106,7 +109,9 @@ public class TCPClient {
      */
     public boolean sendPublicMessage(String message) {
         // TODO Step 2: implement this method
-        // Hint: Reuse sendCommand() method
+        // Recipient(s) are specified on server-side.
+        this.sendCommand(message);
+
         // Hint: update lastError if you want to store the reason for the error.
         return false;
     }
@@ -118,7 +123,9 @@ public class TCPClient {
      */
     public void tryLogin(String username) {
         // TODO Step 3: implement this method
-        // Hint: Reuse sendCommand() method
+
+        sendCommand("login" + username);
+
     }
 
     /**
@@ -140,9 +147,44 @@ public class TCPClient {
      */
     public boolean sendPrivateMessage(String recipient, String message) {
         // TODO Step 6: Implement this method
-        // Hint: Reuse sendCommand() method
-        // Hint: update lastError if you want to store the reason for the error.
-        return false;
+
+        boolean messageSent = false;
+
+        /*
+        try{
+            sendCommand(message);
+
+        } catch (Exception e){
+            System.out.println("There was en error sending message" + e.getMessage());
+            this.lastError = e.getMessage();
+        }
+
+        // Hint: update lastError if you want to store the reason for the error. */
+
+        sendCommand(message);
+
+        if(!sendCommand(message)){
+            System.out.println("Message not sent");
+            this.lastError = "Message not sent";
+        }
+
+        return messageSent;
+
+    }
+
+    /**
+     * Check if message is valid
+     * @param message
+     * @return
+     */
+
+    private boolean isValidMessage(String message) {
+        if (message.indexOf('\n') >= 0) {
+            this.lastError = "Message contains newline, ignored";
+            System.out.println(this.lastError);
+            return false;
+        }
+        return true;
     }
 
 
