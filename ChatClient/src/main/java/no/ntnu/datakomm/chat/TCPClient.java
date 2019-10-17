@@ -119,7 +119,7 @@ public class TCPClient {
      */
     public void tryLogin(String username) {
 
-        sendCommand("login" + username);
+        sendCommand("login " + username);
 
     }
 
