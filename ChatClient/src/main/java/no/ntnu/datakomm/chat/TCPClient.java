@@ -29,15 +29,15 @@ public class TCPClient {
      */
     public boolean connect(String host, int port) {
         try {
-            this.connection = new socket(host, port);
+            this.connection = new Socket(host, port);
             InputStream in = this.connection.getInputStream();
-            Outstream out = this.connection.getOutputStream();
+            OutputStream out = this.connection.getOutputStream();
             this.toServer = new PrintWriter(out, true);
             this.fromServer = new BufferedReader(new InputStreamReader(in));
             return true;
-        } catch (UknownHostException e) {
+        } catch (UnknownHostException e) {
             this.lastError = "Unknown host";
-            system.out.println(this.lastError);
+            System.out.println(this.lastError);
             return false;
         } catch (IOException e) {
             this.lastError = "I/O Error";
