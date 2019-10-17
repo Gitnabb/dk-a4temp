@@ -91,9 +91,6 @@ public class TCPClient {
      */
     private boolean sendCommand(String cmd) {
 
-        if (!isValidMessage(cmd)) {
-            return false;
-        }
         if (this.connection != null) {
             System.out.println("> " + cmd);
             this.toServer.println(cmd);
@@ -111,10 +108,8 @@ public class TCPClient {
      */
     public boolean sendPublicMessage(String message) {
 
-        this.sendCommand(message);
-
         // Hint: update lastError if you want to store the reason for the error.
-        return false;
+        return sendTextMessage("msg", null, message);
     }
 
     /**
@@ -138,6 +133,20 @@ public class TCPClient {
         // client and server exchange for user listing.
     }
 
+    private boolean sendTextMessage(String cmd, String recipient, String message) {
+        if (!isValidMessage(message)) {
+            return false;
+        }
+        String cmdToSend = cmd + " ";
+        if (recipient != null && cmdToSend.length() > 0) {
+            cmdToSend = cmdToSend + recipient + " ";
+        }
+        cmdToSend = cmdToSend + message;
+        sendCommand(cmdToSend);
+        return true;
+    }
+
+
     /**
      * Send a private message to a single recipient.
      *
@@ -149,6 +158,10 @@ public class TCPClient {
         // TODO Step 6: Implement this method
 
         boolean messageSent = false;
+
+        if (!isValidMessage(message)) {
+            messageSent = false;
+        }
 
         /*
         try{
