@@ -288,7 +288,7 @@ public class TCPClient {
                         onUsersList(params.split(" "));
 
                     case "supported":
-                        onHelp(params.split(" "));
+                        onSupported(params.split(" "));
 
                 }
             }
@@ -374,7 +374,8 @@ public class TCPClient {
      * @param errMsg Error description returned by the server
      */
     private void onMsgError(String errMsg) {
-        // TODO Step 7: Implement this method
+        for (ChatListener l: this.listeners)
+            l.onMessageError(errMsg);
     }
 
     /**
@@ -383,14 +384,10 @@ public class TCPClient {
      * @param errMsg Error message
      */
     private void onCmdError(String errMsg) {
-        // TODO Step 7: Implement this method
+        for (ChatListener l: this.listeners)
+            l.onCommandError(errMsg);
     }
 
-    private void onHelp(String[] commands) {
-        for (ChatListener l : this.listeners) {
-            l.onSupportedCommands(commands);
-        }
-    }
 
     /**
      * Notify listeners that a help response (supported commands) was received
@@ -399,6 +396,7 @@ public class TCPClient {
      * @param commands Commands supported by the server
      */
     private void onSupported(String[] commands) {
-        // TODO Step 8: Implement this method
+        for (ChatListener l: this.listeners)
+            l.onSupportedCommands(commands);
     }
 }
