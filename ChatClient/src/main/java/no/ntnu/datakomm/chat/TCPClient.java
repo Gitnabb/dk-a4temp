@@ -257,7 +257,6 @@ public class TCPClient {
                         break;
 
                     case "msg":
-                        break;
                     case "privmsg":
                         priv = cmd.equals("privmsg");
                         spacePos = params.indexOf(' ');
