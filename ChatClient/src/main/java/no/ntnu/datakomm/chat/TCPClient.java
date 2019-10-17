@@ -108,8 +108,7 @@ public class TCPClient {
      * @return true if message sent, false on error
      */
     public boolean sendPublicMessage(String message) {
-        // TODO Step 2: implement this method
-        // Recipient(s) are specified on server-side.
+
         this.sendCommand(message);
 
         // Hint: update lastError if you want to store the reason for the error.
@@ -122,7 +121,6 @@ public class TCPClient {
      * @param username Username to use
      */
     public void tryLogin(String username) {
-        // TODO Step 3: implement this method
 
         sendCommand("login" + username);
 
