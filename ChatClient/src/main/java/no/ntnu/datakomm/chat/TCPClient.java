@@ -55,25 +55,25 @@ public class TCPClient {
      * that no two threads call this method in parallel.
      */
     public synchronized void disconnect() {
-            if (this.connection != null) {
-                System.out.println("Disconnecting...");
+        if (this.connection != null) {
+            System.out.println("Disconnecting...");
 
-                try {
-                    this.toServer.close();
-                    this.fromServer.close();
-                    this.connection.close();
-                } catch (IOException e) {
-                    System.out.println("Error: " + e
-                            .getMessage());
-                    this.lastError = e.getMessage();
-                    this.connection = null;
-                }
-            } else {
-                System.out.println("No connection to close");
+            try {
+                this.toServer.close();
+                this.fromServer.close();
+                this.connection.close();
+            } catch (IOException e) {
+                System.out.println("Error: " + e
+                        .getMessage());
+                this.lastError = e.getMessage();
+                this.connection = null;
             }
-            System.out.println("Disconnected");
-            this.connection = null;
+        } else {
+            System.out.println("No connection to close");
         }
+        System.out.println("Disconnected");
+        this.connection = null;
+    }
 
 
     /**
@@ -128,7 +128,7 @@ public class TCPClient {
      * clear your current user list and use events in the listener.
      */
     public void refreshUserList() {
-      sendCommand("users");
+        sendCommand("users");
     }
 
     private boolean sendTextMessage(String cmd, String recipient, String message) {
@@ -153,35 +153,9 @@ public class TCPClient {
      * @return true if message sent, false on error
      */
     public boolean sendPrivateMessage(String recipient, String message) {
-        // TODO Step 6: Implement this method
-
-        boolean messageSent = false;
-
-        if (!isValidMessage(message)) {
-            messageSent = false;
-        }
-
-        /*
-        try{
-            sendCommand(message);
-
-        } catch (Exception e){
-            System.out.println("There was en error sending message" + e.getMessage());
-            this.lastError = e.getMessage();
-        }
-
-        // Hint: update lastError if you want to store the reason for the error. */
-
-        sendCommand(message);
-
-        if(!sendCommand(message)){
-            System.out.println("Message not sent");
-            this.lastError = "Message not sent";
-        }
-
-        return messageSent;
-
+        return sendTextMessage("privmsg", recipient, message);
     }
+
 
     /**
      * Check if message is valid
