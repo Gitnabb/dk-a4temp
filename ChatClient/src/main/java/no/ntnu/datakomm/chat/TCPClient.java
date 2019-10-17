@@ -362,6 +362,9 @@ public class TCPClient {
     private void onDisconnect() {
         // TODO Step 4: Implement this method
         // Hint: all the onXXX() methods will be similar to onLoginResult()
+        for (ChatListener l : this.listeners)
+            l.onDisconnect();
+
     }
 
     /**
