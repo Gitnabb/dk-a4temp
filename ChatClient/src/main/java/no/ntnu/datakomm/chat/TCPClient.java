@@ -222,7 +222,6 @@ public class TCPClient {
      * Start listening for incoming commands from the server in a new CPU thread.
      */
     public void startListenThread() {
-        // Call parseIncomingCommands() in the new thread.
         Thread t = new Thread(() -> {
             parseIncomingCommands();
         });
