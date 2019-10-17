@@ -128,9 +128,7 @@ public class TCPClient {
      * clear your current user list and use events in the listener.
      */
     public void refreshUserList() {
-        // TODO Step 5: implement this method
-        // Hint: Use Wireshark and the provided chat client reference app to find out what commands the
-        // client and server exchange for user listing.
+      sendCommand("users");
     }
 
     private boolean sendTextMessage(String cmd, String recipient, String message) {
@@ -205,8 +203,7 @@ public class TCPClient {
      * Send a request for the list of commands that server supports.
      */
     public void askSupportedCommands() {
-        // TODO Step 8: Implement this method
-        // Hint: Reuse sendCommand() method
+        sendCommand("help");
     }
 
 
