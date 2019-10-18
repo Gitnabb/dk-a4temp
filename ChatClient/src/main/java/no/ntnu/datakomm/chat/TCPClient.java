@@ -1,8 +1,5 @@
 package no.ntnu.datakomm.chat;
 
-import jdk.internal.util.xml.impl.Input;
-import jdk.nashorn.internal.runtime.ECMAException;
-
 import java.io.*;
 import java.net.Socket;
 import java.net.UnknownHostException;
@@ -15,7 +12,6 @@ public class TCPClient {
     private BufferedReader fromServer;
     private Socket connection;
     private String lastError = null;
-
     private final List<ChatListener> listeners = new LinkedList<>();
 
     /**
@@ -75,7 +71,6 @@ public class TCPClient {
         this.connection = null;
     }
 
-
     /**
      * @return true if the connection is active (opened), false if not.
      */
@@ -90,7 +85,6 @@ public class TCPClient {
      * @return true on success, false otherwise
      */
     private boolean sendCommand(String cmd) {
-
         if (this.connection != null) {
             System.out.println("> " + cmd);
             this.toServer.println(cmd);
@@ -107,8 +101,6 @@ public class TCPClient {
      * @return true if message sent, false on error
      */
     public boolean sendPublicMessage(String message) {
-
-        // Hint: update lastError if you want to store the reason for the error.
         return sendTextMessage("msg", null, message);
     }
 
@@ -118,9 +110,7 @@ public class TCPClient {
      * @param username Username to use
      */
     public void tryLogin(String username) {
-
         sendCommand("login " + username);
-
     }
 
     /**
@@ -378,7 +368,6 @@ public class TCPClient {
             l.onCommandError(errMsg);
     }
 
-
     /**
      * Notify listeners that a help response (supported commands) was received
      * from the server
@@ -389,5 +378,4 @@ public class TCPClient {
         for (ChatListener l: this.listeners)
             l.onSupportedCommands(commands);
     }
-
 }
